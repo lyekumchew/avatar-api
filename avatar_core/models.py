@@ -19,7 +19,7 @@ class SampleMeta(models.Model):
 
 class Sample(models.Model):
     id = models.CharField(max_length=36, primary_key=True)
-    p = models.ForeignKey(Point)
+    p = models.ForeignKey(Point, on_delete=models.CASCADE)
     t = models.DateTimeField()
     speed = models.IntegerField(null=True)
     angle = models.IntegerField(null=True)
@@ -33,7 +33,7 @@ class Sample(models.Model):
 
 class Intersection(models.Model):
     id = models.CharField(max_length=36, primary_key=True)
-    p = models.ForeignKey(Point, null=True)
+    p = models.ForeignKey(Point, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.id
@@ -61,7 +61,7 @@ class Trace(models.Model):
 
 
 class PathFragment(models.Model):
-    road = models.ForeignKey(Road)
+    road = models.ForeignKey(Road, on_delete=models.CASCADE)
     p = models.TextField(max_length=65535, null=True)
 
     def __str__(self):
@@ -79,8 +79,8 @@ class Path(models.Model):
 class Trajectory(models.Model):
     id = models.CharField(max_length=36, primary_key=True)
     taxi = models.CharField(max_length=255)
-    trace = models.ForeignKey(Trace, null=True)
-    path = models.ForeignKey(Path, null=True)
+    trace = models.ForeignKey(Trace, null=True, on_delete=models.CASCADE)
+    path = models.ForeignKey(Path, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.id
@@ -101,7 +101,7 @@ class GridCell(models.Model):
     lat_id = models.IntegerField()
     lng_id = models.IntegerField()
     # Bounding box of the gird cell
-    area = models.ForeignKey(Rect)
+    area = models.ForeignKey(Rect, on_delete=models.CASCADE)
     roads = models.ManyToManyField(Road)
     intersections = models.ManyToManyField(Intersection)
 
@@ -116,8 +116,8 @@ class RoadNetwork(models.Model):
     grid_cells = models.ManyToManyField(GridCell)
     grid_lat_count = models.IntegerField(null=True)
     grid_lng_count = models.IntegerField(null=True)
-    pmin = models.ForeignKey(Point, related_name="pmin", null=True)
-    pmax = models.ForeignKey(Point, related_name="pmax", null=True)
+    pmin = models.ForeignKey(Point, related_name="pmin", null=True, on_delete=models.CASCADE)
+    pmax = models.ForeignKey(Point, related_name="pmax", null=True, on_delete=models.CASCADE)
     graph = models.CharField(max_length=10485760, null=True)
     shortest_path_index = models.CharField(max_length=10485760, null=True)
 

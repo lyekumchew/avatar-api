@@ -22,12 +22,12 @@ INSTALLED_APPS = (
     "avatar_simulator"
 )
 
-MIDDLEWARE_CLASSES = (
+MIDDLEWARE = (
     "django.contrib.sessions.middleware.SessionMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
-    "django.contrib.auth.middleware.SessionAuthenticationMiddleware",
+    # "django.contrib.auth.middleware.SessionAuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
@@ -62,8 +62,8 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql_psycopg2",
         "NAME": "avatar",
         "USER": "postgres",
-        "PASSWORD": "",
-        "HOST": "localhost",
+        "PASSWORD": "postgres",
+        "HOST": "postgres",
         "PORT": "5432",
     }
 }
