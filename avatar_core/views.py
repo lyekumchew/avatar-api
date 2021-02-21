@@ -11,8 +11,8 @@ from rest_framework.response import Response
 from avatar_core.cache import *
 from avatar_core.map import *
 
-MAP_UPLOAD_DIR = "/var/www/html/avatar/data/map/"
-TRAJ_UPLOAD_DIR = "/var/www/html/avatar/data/trajectory/"
+MAP_UPLOAD_DIR = "/app/data/map/"
+TRAJ_UPLOAD_DIR = "/app/data/trajectory/"
 
 
 class TrajectoryViewSet(viewsets.ModelViewSet):
