@@ -234,10 +234,10 @@ class HmmMapMatching:
             log("Calculating delta and beta...")
         deltas.sort()
         betas.sort()
-        delta = 1.4826 * deltas[len(deltas) / 2]
+        delta = 1.4826 * deltas[int(len(deltas) / 2)]
         if delta == 0.0:
             delta = 1.4826 * (sum(deltas) / float(len(deltas)))
-        beta = betas[len(betas) / 2] / 0.69314718
+        beta = betas[int(len(betas) / 2)] / 0.69314718
         if beta == 0.0:
             beta = (sum(betas) / float(len(betas))) / 0.69314718
         return {'delta': delta, 'beta': beta}
