@@ -314,7 +314,7 @@ def export_road_network_to_local_file(request):
         road_network = RoadNetwork.objects.get(id=road_network_id)
         file_name = "avatar-road-network-" + road_network.city + "-" + road_network_id + ".json"
         f = open(MAP_UPLOAD_DIR + file_name, "w")
-        f.write(get_road_network_by_id(road_network_id))
+        f.write(json.dumps(get_road_network_by_id(road_network_id)))
         f.close()
         return Response({
             "filename": file_name
@@ -406,7 +406,8 @@ def create_graph_by_road_network_id(request):
             if len(intersections) >= 2:
                 graph.add_edge(intersections[0].id, intersections[1].id, weight=road.length, id=road.id)
             else:
-                log("WARNING: # of intersections of road " + str(road.id) + " is less than 2. This road will be ignored in the graph.", "yellow")
+                log("WARNING: # of intersections of road " + str(
+                    road.id) + " is less than 2. This road will be ignored in the graph.", "yellow")
         road_network.graph = json.dumps(json_graph.node_link_data(graph))
         road_network.save()
         end = datetime.now()
