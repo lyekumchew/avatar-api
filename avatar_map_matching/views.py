@@ -104,9 +104,9 @@ def reperform_map_matching(request):
         # Load road network and trace to memory
         trace = TraceSerializer(traj.trace).data
         # Convert action list to dictionary
-        if not USER_HISTORY.has_key(request.GET['uid']):
+        if request.GET['uid'] not in USER_HISTORY.keys():
             USER_HISTORY[request.GET['uid']] = dict()
-        if not USER_HISTORY[request.GET['uid']].has_key(request.GET['id']):
+        if request.GET['id'] not in USER_HISTORY[request.GET['uid']].keys():
             USER_HISTORY[request.GET['uid']][request.GET['id']] = dict()
         p_list = trace["p"]
         p_list.sort(key=lambda d: d["t"])
@@ -124,7 +124,8 @@ def reperform_map_matching(request):
             log(USER_HISTORY[request.GET['uid']][request.GET['id']])
         hmm = HmmMapMatching()
         start = datetime.now()
-        hmm_result = hmm.reperform_map_matching(road_network, trace, candidate_rank, USER_HISTORY[request.GET['uid']][request.GET['id']])
+        hmm_result = hmm.reperform_map_matching(road_network, trace, candidate_rank,
+                                                USER_HISTORY[request.GET['uid']][request.GET['id']])
         HMM_RESULT[request.GET['id']] = hmm.generate_hmm_path(trace["id"], hmm_result)
         # path = hmm.save_hmm_path_to_database(city, trace["id"], hmm_result)
         # traj.path = path
@@ -166,8 +167,8 @@ def save_user_history(request):
         user = Account.objects.get(id=request.GET['uid'])
         traj = Trajectory.objects.get(id=request.GET['id'])
         p_list = traj.trace.p.all().order_by("t")
-        if USER_HISTORY.has_key(request.GET['uid']):
-            if USER_HISTORY[request.GET['uid']].has_key(request.GET['id']):
+        if request.GET['uid'] in USER_HISTORY.keys():
+            if request.GET['id'] in USER_HISTORY[request.GET['uid']].keys():
                 for p_index in USER_HISTORY[request.GET['uid']][request.GET['id']]:
                     sample = traj.trace.p.get(id=p_list[p_index].id)
                     road = city.roads.get(id=USER_HISTORY[request.GET['uid']][request.GET['id']][p_index])
@@ -303,7 +304,7 @@ def remove_history_by_user(request):
 @api_view(['GET'])
 def remove_history_by_user_from_cache(request):
     if 'id' in request.GET and 'uid' in request.GET:
-        if USER_HISTORY.has_key(request.GET['uid']) and USER_HISTORY[request.GET['uid']].has_key(request.GET['id']):
+        if request.GET['uid'] in USER_HISTORY.keys() and request.GET['id'] in USER_HISTORY[request.GET['uid']].keys():
             USER_HISTORY[request.GET['uid']].__delitem__(request.GET['id'])
         return Response(status=status.HTTP_204_NO_CONTENT)
     else:
