@@ -32,7 +32,7 @@ def create_road_network_dict(road_network_id):
     # Save all grid cells associated with the road network
     road_network_dict["grid_cells"] = dict()
     for grid_cell in road_network_data["grid_cells"]:
-        if not road_network_dict["grid_cells"].has_key(str(grid_cell["lat_id"])):
+        if str(grid_cell["lat_id"]) not in road_network_dict["grid_cells"]:
             road_network_dict["grid_cells"][str(grid_cell["lat_id"])] = dict()
         road_network_dict["grid_cells"][str(grid_cell["lat_id"])][str(grid_cell["lng_id"])] = grid_cell
     # Save other information associated with the road network

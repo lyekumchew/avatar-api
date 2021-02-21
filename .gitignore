@@ -59,3 +59,5 @@ target/
 # JetBrains
 .idea/
 */migrations
+
+venv
