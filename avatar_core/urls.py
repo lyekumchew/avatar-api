@@ -11,6 +11,12 @@ urlpatterns = [
     url(r'traj/remove/$', remove_traj_by_id),
     url(r'traj/remove_all/$', remove_all_traj),
     url(r'traj/get_all/$', get_all_traj_id),
+
+    url(r'delete/$', delete_file),
+    url(r'list/$', list_file),
+    url(r'traj/upload/$', traj_upload),
+    url(r'map/upload/$', map_upload),
+
     url(r'road/get/$', get_road_by_id),
     # Road network related
     url(r'road_network/create/$', create_road_network_from_local_file),

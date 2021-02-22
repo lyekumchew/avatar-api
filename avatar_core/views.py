@@ -1,9 +1,11 @@
 import csv
+import os
 
 import networkx
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import IntegrityError
 from django.db.models import Max, Min
+from django.http import JsonResponse
 from rest_framework import viewsets, status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -263,6 +265,76 @@ def get_all_traj_id(request):
     return Response({
         "ids": Trajectory.objects.values_list('id', flat=True).order_by('id')
     })
+
+
+@api_view(['GET'])
+def delete_file(request):
+    if 'file' in request.GET and 'type' in request.GET:
+        if not str(request.GET['file']).lower().endswith('.csv'):
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        if int(request.GET['type']) == 0:
+            trajs = os.listdir(TRAJ_UPLOAD_DIR)
+            if request.GET["file"] in trajs:
+                os.remove(TRAJ_UPLOAD_DIR + request.GET["file"])
+                return Response(status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+        elif int(request.GET['type']) == 1:
+            maps = os.listdir(MAP_UPLOAD_DIR)
+            if request.GET["file"] in maps:
+                os.remove(TRAJ_UPLOAD_DIR + request.GET["file"])
+                return Response(status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_404_NOT_FOUND)
+    else:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def list_file(request):
+    if 'type' in request.GET:
+        if int(request.GET['type']) == 0:
+            dataDir = TRAJ_UPLOAD_DIR
+        elif int(request.GET['type']) == 1:
+            dataDir = MAP_UPLOAD_DIR
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+        files = os.listdir(dataDir)
+        output = []
+        for file in files:
+            if file.lower().endswith('.csv'):
+                fileSize = os.path.getsize(dataDir + file)
+                fileMTime = os.path.getmtime(dataDir + file)
+                fileTime = datetime.fromtimestamp(fileMTime).strftime("%Y-%m-%d %H:%I:%S")
+                fileInfo = {"name": file, "time": fileTime, "size": fileSize}
+                output.append(fileInfo)
+        return JsonResponse(output, safe=False)
+
+
+@api_view(['POST'])
+def traj_upload(request):
+    files = request.FILES.getlist('files[]')
+    for f in files:
+        if str(f.name).lower().endswith('.csv'):
+            d = open(TRAJ_UPLOAD_DIR + f.name, 'wb+')
+            for chunk in f.chunks():
+                d.write(chunk)
+            d.close()
+
+    return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def map_upload(request):
+    files = request.FILES.getlist('files[]')
+    for f in files:
+        if str(f.name).lower().endswith('.csv'):
+            d = open(MAP_UPLOAD_DIR + f.name, 'wb+')
+            for chunk in f.chunks():
+                d.write(chunk)
+            d.close()
+
+    return Response(status=status.HTTP_200_OK)
 
 
 @api_view(['GET'])
