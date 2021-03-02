@@ -321,7 +321,7 @@ def traj_upload(request):
                 d.write(chunk)
             d.close()
 
-    return Response(status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_201_CREATED)
 
 
 @api_view(['POST'])
@@ -334,7 +334,7 @@ def map_upload(request):
                 d.write(chunk)
             d.close()
 
-    return Response(status=status.HTTP_200_OK)
+    return Response(status=status.HTTP_201_CREATED)
 
 
 @api_view(['GET'])
