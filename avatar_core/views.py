@@ -282,7 +282,7 @@ def delete_file(request):
         elif int(request.GET['type']) == 1:
             maps = os.listdir(MAP_UPLOAD_DIR)
             if request.GET["file"] in maps:
-                os.remove(TRAJ_UPLOAD_DIR + request.GET["file"])
+                os.remove(MAP_UPLOAD_DIR + request.GET["file"])
                 return Response(status=status.HTTP_200_OK)
             else:
                 return Response(status=status.HTTP_404_NOT_FOUND)
