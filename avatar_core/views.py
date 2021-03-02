@@ -306,7 +306,7 @@ def list_file(request):
                 fileSize = os.path.getsize(dataDir + file)
                 fileMTime = os.path.getmtime(dataDir + file)
                 fileTime = datetime.fromtimestamp(fileMTime).strftime("%Y-%m-%d %H:%I:%S")
-                fileInfo = {"name": file, "time": fileTime, "size": fileSize}
+                fileInfo = {"name": file, "time": fileTime, "size": "{:,}".format(fileSize)}
                 output.append(fileInfo)
         return JsonResponse(output, safe=False)
 
