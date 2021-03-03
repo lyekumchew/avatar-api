@@ -111,7 +111,7 @@ def next_point(road_network, path, point, road, location, next_sec, path_index, 
                 if settings.DEBUG:
                     log("Length of road " + str(road["id"]) + " is " + str(road["length"]))
                 # Randomly decide the remaining distance of the last road segment
-                remain_dis = random.randint(int(distance) / 2, int(distance))
+                remain_dis = random.uniform(int(distance) / 2, int(distance))
             k = remain_dis / Distance.earth_dist(point, p_set[next_l])
             next_lat = point["lat"] + k * (p_set[next_l]["lat"] - point["lat"])
             next_lng = point["lng"] + k * (p_set[next_l]["lng"] - point["lng"])
