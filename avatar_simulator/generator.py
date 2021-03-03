@@ -28,7 +28,7 @@ def shortest_path_generator(road_network, graph, start, end, num_edge, prev_rid)
             source = start["id"]
         else:
             intersections = road_network["intersections"]
-            source = intersections.keys()[random.randint(0, len(intersections)) - 1]
+            source = list(intersections.keys())[random.randint(0, len(intersections)) - 1]
         # Select the target intersections with the right path length to source
         target_set = []
         path_set = networkx.single_source_shortest_path(graph, source, num_edge)
